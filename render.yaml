@@ -22,14 +22,14 @@ services:
         value: nexasoul-admin-2026
         sync: false
       - key: CLIENT_URL
-        value: https://nexasoul-quiz-frontend.onrender.com
+        value: https://nexasoul-srujana.onrender.com
 
   # Frontend (Static Site)
   - type: web
     name: nexasoul-quiz-frontend
     env: static
     rootDir: client
-    buildCommand: npm install --production=false && VITE_API_URL=https://nexasoul-quiz-api.onrender.com/api npm run build
+    buildCommand: npm install --production=false && VITE_API_URL=https://nexasoul-Weekely-api.onrender.com/api npm run build
     staticPublishPath: dist
 
 databases:
