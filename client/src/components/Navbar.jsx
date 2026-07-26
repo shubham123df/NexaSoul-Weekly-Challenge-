@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Calendar, X as CloseIcon } from 'lucide-react';
@@ -14,7 +14,7 @@ const links = [
   { to: '/leaderboard', label: 'Leaderboard' },
 ];
 
-export default function Navbar() {
+function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [posterOpen, setPosterOpen] = useState(false);
@@ -78,9 +78,9 @@ export default function Navbar() {
         y: isVisible ? 0 : -120,
         opacity: isVisible ? 1 : 0,
       }}
-      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
       className="fixed top-0 left-0 right-0 z-50 px-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))] pb-3 sm:px-4 sm:py-4 pointer-events-none"
-      style={{ pointerEvents: isVisible ? 'auto' : 'none' }}
+      style={{ pointerEvents: isVisible ? 'auto' : 'none', willChange: 'transform, opacity' }}
     >
       <nav className="max-w-7xl mx-auto min-w-0 bg-glass backdrop-blur-glass-lg border border-border rounded-2xl shadow-glass px-2.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between pointer-events-auto">
         <LogoBar className="shrink min-w-0" />
@@ -266,3 +266,5 @@ export default function Navbar() {
     </motion.header>
   );
 }
+
+export default memo(Navbar);

@@ -10,8 +10,6 @@ export default function Review() {
   const [review, setReview] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isScrollingDown, setIsScrollingDown] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const results = JSON.parse(sessionStorage.getItem('nexasoul_results') || 'null');
   const quizState = JSON.parse(sessionStorage.getItem('nexasoul_quiz_state') || 'null');
 
@@ -53,34 +51,6 @@ export default function Review() {
       });
   }, [results, quizState, navigate]);
 
-  // Hide navbar when scrolling down
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsScrollingDown(true);
-      } else if (currentScrollY < lastScrollY) {
-        setIsScrollingDown(false);
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  // Apply hidden class to header when scrolling down
-  useEffect(() => {
-    const header = document.querySelector('header');
-    if (header) {
-      if (isScrollingDown) {
-        header.classList.add('hidden');
-      } else {
-        header.classList.remove('hidden');
-      }
-    }
-  }, [isScrollingDown]);
-
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto text-center py-20">
@@ -90,7 +60,7 @@ export default function Review() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto hide-navbar-scroll">
+    <div className="max-w-4xl mx-auto">
         {/* Centered review section */}
         <div className="w-full">
           <motion.div

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaQuery';
 
 const allOrbs = [
@@ -14,7 +15,7 @@ const allOrbs = [
 
 const mobileOrbIndices = [0, 1, 4, 6];
 
-export default function AnimatedBackground() {
+function AnimatedBackground() {
   const isMobile = useIsMobile();
   const reducedMotion = usePrefersReducedMotion();
   const orbs = isMobile ? mobileOrbIndices.map((i) => allOrbs[i]) : allOrbs;
@@ -24,7 +25,7 @@ export default function AnimatedBackground() {
     <div
       className="fixed inset-0 overflow-hidden pointer-events-none -z-10"
       aria-hidden="true"
-      style={{ contain: 'strict' }}
+      style={{ contain: 'strict', willChange: 'auto' }}
     >
       {orbs.map((orb, i) => (
         <div
@@ -39,6 +40,7 @@ export default function AnimatedBackground() {
             '--orb-duration': `${orb.duration}s`,
             '--orb-delay': `${orb.delay}s`,
             opacity: isMobile ? 0.4 : 0.6,
+            willChange: 'transform, opacity',
           }}
         />
       ))}
@@ -48,6 +50,7 @@ export default function AnimatedBackground() {
         style={{
           backgroundImage: 'radial-gradient(rgba(37, 99, 235, 0.4) 1.5px, transparent 1.5px)',
           backgroundSize: isMobile ? '32px 32px' : '40px 40px',
+          willChange: 'auto',
         }}
       />
 
@@ -61,18 +64,21 @@ export default function AnimatedBackground() {
             style={{
               background: 'linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(6,182,212,0.1) 50%, rgba(139,92,246,0.1) 100%)',
               backgroundSize: '400% 400%',
+              willChange: 'background-position',
             }}
           />
           <div
             className={`bg-orb top-1/4 left-1/4 w-[600px] h-[600px] blur-[150px] bg-primary/8 ${shouldAnimate ? 'bg-orb-animate' : ''}`}
-            style={{ '--orb-duration': '25s', '--orb-delay': '0s' }}
+            style={{ '--orb-duration': '25s', '--orb-delay': '0s', willChange: 'transform' }}
           />
           <div
             className={`bg-orb bottom-1/4 right-1/4 w-[500px] h-[500px] blur-[120px] bg-accent-cyan/6 ${shouldAnimate ? 'bg-orb-animate' : ''}`}
-            style={{ '--orb-duration': '28s', '--orb-delay': '2s' }}
+            style={{ '--orb-duration': '28s', '--orb-delay': '2s', willChange: 'transform' }}
           />
         </>
       )}
     </div>
   );
 }
+
+export default memo(AnimatedBackground);

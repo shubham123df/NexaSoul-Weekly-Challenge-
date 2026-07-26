@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Users, Trophy, Zap, Sparkles } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const posterData = {
   difficulty: 'Intermediate',
 };
 
-export default function WeeklyPoster({ posterUrl, compact = false }) {
+function WeeklyPoster({ posterUrl, compact = false }) {
   // Convert Google Drive sharing link to direct image link
   const getDirectImageUrl = (url) => {
     if (!url) return url;
@@ -81,6 +82,8 @@ export default function WeeklyPoster({ posterUrl, compact = false }) {
                       src={directPosterUrl}
                       alt="Weekly Challenge Poster"
                       className="w-full h-full object-contain"
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         console.error('Poster image failed to load:', directPosterUrl);
                         e.target.style.display = 'none';
@@ -162,3 +165,5 @@ export default function WeeklyPoster({ posterUrl, compact = false }) {
     </motion.div>
   );
 }
+
+export default memo(WeeklyPoster);
