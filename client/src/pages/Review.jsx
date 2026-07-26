@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { quizApi } from '../api/client';
+import { useQuiz } from '../context/QuizContext';
 
 const labels = ['A', 'B', 'C', 'D'];
 
 export default function Review() {
   const navigate = useNavigate();
+  const { exitQuiz } = useQuiz();
   const [review, setReview] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,6 +16,9 @@ export default function Review() {
   const quizState = JSON.parse(sessionStorage.getItem('nexasoul_quiz_state') || 'null');
 
   useEffect(() => {
+    // Ensure navbar is visible on review page
+    exitQuiz();
+
     if (!results?.quizId) {
       navigate('/results');
       return;
@@ -49,7 +54,7 @@ export default function Review() {
       .catch(() => {
         navigate('/results');
       });
-  }, [results, quizState, navigate]);
+  }, [results, quizState, navigate, exitQuiz]);
 
   if (loading) {
     return (

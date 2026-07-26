@@ -46,14 +46,10 @@ export default function Results() {
 
     }
 
-    // Ensure navbar is visible on results page - use timeout to ensure context updates
-    const timer = setTimeout(() => {
-      exitQuiz();
-    }, 100);
+    // Ensure navbar is visible on results page - call immediately
+    exitQuiz();
 
     fireConfetti();
-
-    return () => clearTimeout(timer);
 
   }, [results, navigate, exitQuiz]);
 
