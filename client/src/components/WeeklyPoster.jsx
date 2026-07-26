@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Users, Trophy, Zap, Sparkles } from 'lucide-react';
 
@@ -16,7 +15,7 @@ const posterData = {
   difficulty: 'Intermediate',
 };
 
-function WeeklyPoster({ posterUrl, compact = false }) {
+export default function WeeklyPoster({ posterUrl, compact = false }) {
   // Convert Google Drive sharing link to direct image link
   const getDirectImageUrl = (url) => {
     if (!url) return url;
@@ -24,8 +23,8 @@ function WeeklyPoster({ posterUrl, compact = false }) {
     const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
     if (driveMatch) {
       const fileId = driveMatch[1];
-      // Try multiple Google Drive direct link formats
-      return `https://lh3.googleusercontent.com/d/${fileId}`;
+      // Try thumbnail format which often works better for shared files
+      return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
     }
     return url;
   };
@@ -82,8 +81,6 @@ function WeeklyPoster({ posterUrl, compact = false }) {
                       src={directPosterUrl}
                       alt="Weekly Challenge Poster"
                       className="w-full h-full object-contain"
-                      loading="lazy"
-                      decoding="async"
                       onError={(e) => {
                         console.error('Poster image failed to load:', directPosterUrl);
                         e.target.style.display = 'none';
@@ -165,5 +162,3 @@ function WeeklyPoster({ posterUrl, compact = false }) {
     </motion.div>
   );
 }
-
-export default memo(WeeklyPoster);

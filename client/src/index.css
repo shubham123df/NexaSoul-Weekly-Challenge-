@@ -33,7 +33,6 @@
     overflow-x: clip;
     min-height: 100vh;
     isolation: isolate;
-    contain: layout style paint;
   }
 
   img,
@@ -41,7 +40,6 @@
   video,
   canvas {
     max-width: 100%;
-    contain: layout;
   }
 
   input,

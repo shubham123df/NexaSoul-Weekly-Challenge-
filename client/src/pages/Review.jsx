@@ -16,13 +16,13 @@ export default function Review() {
   const quizState = JSON.parse(sessionStorage.getItem('nexasoul_quiz_state') || 'null');
 
   useEffect(() => {
-    // Ensure navbar is visible on review page
-    exitQuiz();
-
     if (!results?.quizId) {
       navigate('/results');
       return;
     }
+
+    // Ensure navbar is visible on review page
+    exitQuiz();
 
     // Handle demo mode
     if (results.demoMode && quizState?.quiz) {
@@ -65,7 +65,7 @@ export default function Review() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto hide-navbar-scroll pt-24">
         {/* Centered review section */}
         <div className="w-full">
           <motion.div
