@@ -21,6 +21,13 @@ export default function Review() {
       return;
     }
 
+    // If quiz was auto-submitted (no answers provided), redirect to results
+    if (results.autoSubmitted) {
+      console.log('Quiz was auto-submitted, redirecting to results');
+      navigate('/results');
+      return;
+    }
+
     // Ensure navbar is visible on review page
     exitQuiz();
 

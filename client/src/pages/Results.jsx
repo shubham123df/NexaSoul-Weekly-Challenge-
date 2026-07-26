@@ -57,7 +57,13 @@ export default function Results() {
 
   if (!results) return null;
 
-
+  // If quiz was auto-submitted, override stats to show 0 score
+  if (results.autoSubmitted) {
+    results.totalScore = 0;
+    results.accuracy = 0;
+    results.correctCount = 0;
+    results.wrongCount = 0;
+  }
 
   const stats = [
 
@@ -251,9 +257,11 @@ export default function Results() {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link to="/review" className="btn-primary text-center hover-lift">
-                Why is this answer correct?
-              </Link>
+              {!results.autoSubmitted && (
+                <Link to="/review" className="btn-primary text-center hover-lift">
+                  Why is this answer correct?
+                </Link>
+              )}
               <Link to="/leaderboard" className="btn-secondary text-center hover-lift">
                 View Leaderboard
               </Link>
@@ -265,9 +273,11 @@ export default function Results() {
 
           {/* Mobile static buttons */}
           <div className="sm:hidden flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/review" className="btn-primary text-center hover-lift">
-              Why is this answer correct?
-            </Link>
+            {!results.autoSubmitted && (
+              <Link to="/review" className="btn-primary text-center hover-lift">
+                Why is this answer correct?
+              </Link>
+            )}
             <Link to="/leaderboard" className="btn-secondary text-center hover-lift">
               View Leaderboard
             </Link>

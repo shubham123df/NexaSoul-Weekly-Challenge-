@@ -153,16 +153,21 @@ export default function Quiz() {
 
     const timeTakenSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
 
+    // If no answers provided, don't submit fake answers - show results with 0 score
+    const wasAutoSubmitted = finalAnswers.length === 0;
+    const answersToSubmit = finalAnswers.length > 0 ? finalAnswers : [];
+
     try {
       const res = await quizApi.submit(quiz._id, {
         ...registrationRef.current,
-        answers: finalAnswers,
+        answers: answersToSubmit,
         timeTakenSeconds,
       });
 
       sessionStorage.setItem('nexasoul_results', JSON.stringify({
         ...res.data,
         quizId: quiz._id,
+        autoSubmitted: wasAutoSubmitted, // Flag to indicate auto-submission
       }));
 
       navigate('/results');
@@ -188,6 +193,13 @@ export default function Quiz() {
         
         navigate('/results');
       } else {
+        // Check if error is "already submitted" - redirect to results
+        if (err.response?.data?.message?.includes('already submitted') || err.response?.status === 409) {
+          // User already submitted - redirect to results
+          console.log('User already submitted, redirecting to results');
+          navigate('/results');
+          return;
+        }
         setError(err.response?.data?.message || 'Submission failed');
         setSubmitting(false);
         enterQuizZone();
