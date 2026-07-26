@@ -35,9 +35,14 @@ export default function Leaderboard() {
     leaderboardApi.getTop(10)
 
       .then((res) => {
-
-        setData(res.data);
-
+        // Sort by score (descending) and time (ascending) on frontend
+        const sortedLeaderboard = [...res.data.leaderboard].sort((a, b) => {
+          if (b.totalScore !== a.totalScore) {
+            return b.totalScore - a.totalScore;
+          }
+          return a.timeTakenSeconds - b.timeTakenSeconds;
+        });
+        setData({ ...res.data, leaderboard: sortedLeaderboard });
         setLoading(false);
 
       })
@@ -197,7 +202,7 @@ export default function Leaderboard() {
 
               <div className="text-right shrink-0">
 
-                <div className="font-bold text-lg text-accent-green hover-glow">{entry.totalScore}</div>
+                <div className="font-bold text-lg text-black hover-glow">{entry.totalScore}</div>
 
                 <div className="text-xs text-text-100">{formatTime(entry.timeTakenSeconds)}</div>
 

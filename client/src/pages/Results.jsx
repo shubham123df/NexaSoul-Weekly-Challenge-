@@ -46,10 +46,14 @@ export default function Results() {
 
     }
 
-    // Ensure navbar is visible on results page
-    exitQuiz();
+    // Ensure navbar is visible on results page - use timeout to ensure context updates
+    const timer = setTimeout(() => {
+      exitQuiz();
+    }, 100);
 
     fireConfetti();
+
+    return () => clearTimeout(timer);
 
   }, [results, navigate, exitQuiz]);
 
@@ -84,7 +88,7 @@ export default function Results() {
 
   return (
 
-    <div className="max-w-5xl mx-auto pt-24">
+    <div className="max-w-5xl mx-auto">
       <div className="grid lg:grid-cols-5 gap-8 items-start">
         
         {/* Left decorative section */}
