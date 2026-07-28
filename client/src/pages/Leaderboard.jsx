@@ -24,6 +24,35 @@ export default function Leaderboard() {
 
   const [loading, setLoading] = useState(true);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Check for reduced motion preference
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handleResize = () => checkMobile();
+    const handleMotionChange = (e) => setPrefersReducedMotion(e.matches);
+    
+    checkMobile();
+    window.addEventListener('resize', handleResize);
+    mediaQuery.addEventListener('change', handleMotionChange);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleMotionChange);
+    };
+  }, []);
+
 
 
   useEffect(() => {
@@ -54,44 +83,41 @@ export default function Leaderboard() {
     <div className="max-w-3xl mx-auto">
 
       <div className="hidden sm:block">
-        <motion.div
-
-          initial={{ opacity: 0, y: 20 }}
-
-          animate={{ opacity: 1, y: 0 }}
-
-          className="text-center mb-8"
-
-        >
-
-        <motion.div
-
-          initial={{ scale: 0.9, opacity: 0 }}
-
-          animate={{ scale: 1, opacity: 1 }}
-
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4"
-
-        >
-
-          <Trophy className="w-4 h-4" />
-          Top Performers
-
-        </motion.div>
-
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-
-          <span className="text-gradient">Leaderboard</span>
-
-        </h1>
-
-        <p className="text-text-100">
-
-          {data.quizTitle || 'Top 10 participants'}
-
-        </p>
-
-      </motion.div>
+        {!isMobile && !prefersReducedMotion ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4"
+            >
+              <Trophy className="w-4 h-4" />
+              Top Performers
+            </motion.div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+              <span className="text-gradient">Leaderboard</span>
+            </h1>
+            <p className="text-text-100">
+              {data.quizTitle || 'Top 10 participants'}
+            </p>
+          </motion.div>
+        ) : (
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
+              <Trophy className="w-4 h-4" />
+              Top Performers
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+              <span className="text-gradient">Leaderboard</span>
+            </h1>
+            <p className="text-text-100">
+              {data.quizTitle || 'Top 10 participants'}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Mobile static version */}
@@ -151,27 +177,17 @@ export default function Leaderboard() {
         </motion.div>
 
       ) : (
-
         <div className="space-y-3">
-
           {data.leaderboard.map((entry, i) => (
-
             <motion.div
-
               key={i}
-
-              initial={{ opacity: 0, x: -20 }}
-
-              animate={{ opacity: 1, x: 0 }}
-
-              transition={{ delay: i * 0.05 }}
-
-              whileHover={{ x: 4, scale: 1.01 }}
-
+              initial={!isMobile && !prefersReducedMotion ? { opacity: 0, x: -20 } : undefined}
+              animate={!isMobile && !prefersReducedMotion ? { opacity: 1, x: 0 } : undefined}
+              transition={!isMobile && !prefersReducedMotion ? { delay: i * 0.05 } : undefined}
+              whileHover={!isMobile ? { x: 4, scale: 1.01 } : undefined}
               className={`glass-card p-4 sm:p-5 flex items-center gap-4 hover-lift card-shine ${
                 i < 3 ? 'border-primary/20' : ''
               }`}
-
             >
 
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg shrink-0 transition-all duration-300 hover:scale-110 ${

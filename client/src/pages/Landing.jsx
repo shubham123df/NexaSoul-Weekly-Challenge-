@@ -15,8 +15,6 @@ import WeeklyPoster from '../components/WeeklyPoster';
 
 import RotatingText from '../components/RotatingText';
 
-import Hero3DAnimation from '../components/Hero3DAnimation';
-
 
 
 const containerVariants = {
@@ -129,6 +127,35 @@ export default function Landing() {
 
   const [loading, setLoading] = useState(true);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Check for reduced motion preference
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handleResize = () => checkMobile();
+    const handleMotionChange = (e) => setPrefersReducedMotion(e.matches);
+    
+    checkMobile();
+    window.addEventListener('resize', handleResize);
+    mediaQuery.addEventListener('change', handleMotionChange);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleMotionChange);
+    };
+  }, []);
+
 
 
   useEffect(() => {
@@ -163,92 +190,96 @@ export default function Landing() {
 
       <section className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50/30 via-purple-50/20 to-cyan-50/30 w-full min-h-screen flex items-center" style={{ backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
 
-        {/* Animated decorative circles */}
-        <motion.div 
-          className="absolute top-8 right-8 sm:top-12 sm:right-16 lg:top-20 lg:right-32 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-accent-yellow opacity-80 blur-2xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.8, 0.6, 0.8]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+        {/* Animated decorative circles - only disabled for reduced motion preference */}
+        {!prefersReducedMotion && (
+          <>
+            <motion.div 
+              className="absolute top-8 right-8 sm:top-12 sm:right-16 lg:top-20 lg:right-32 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-accent-yellow opacity-80 blur-2xl"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.8, 0.6, 0.8]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
 
-        <motion.div 
-          className="absolute bottom-12 right-4 sm:bottom-20 sm:right-12 w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 rounded-full bg-primary opacity-60 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.6, 0.4, 0.6]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5
-          }}
-        />
+            <motion.div 
+              className="absolute bottom-12 right-4 sm:bottom-20 sm:right-12 w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 rounded-full bg-primary opacity-60 blur-3xl"
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.6, 0.4, 0.6]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5
+              }}
+            />
 
-        {/* Additional animated elements */}
-        <motion.div 
-          className="absolute top-1/4 left-8 w-16 h-16 rounded-full bg-accent-lime opacity-40 blur-xl"
-          animate={{
-            y: [0, -20, 0],
-            x: [0, 10, 0]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+            {/* Additional animated elements */}
+            <motion.div 
+              className="absolute top-1/4 left-8 w-16 h-16 rounded-full bg-accent-lime opacity-40 blur-xl"
+              animate={{
+                y: [0, -20, 0],
+                x: [0, 10, 0]
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
 
-        <motion.div 
-          className="absolute bottom-1/4 left-16 w-12 h-12 rounded-full bg-accent-blue opacity-50 blur-lg"
-          animate={{
-            y: [0, 15, 0],
-            x: [0, -8, 0]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
+            <motion.div 
+              className="absolute bottom-1/4 left-16 w-12 h-12 rounded-full bg-accent-blue opacity-50 blur-lg"
+              animate={{
+                y: [0, 15, 0],
+                x: [0, -8, 0]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
 
-        {/* Subtle decorative marks (doodles) */}
-        <motion.div 
-          className="absolute top-16 left-6 text-accent-yellow text-2xl opacity-40"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >⊕</motion.div>
-        <motion.div 
-          className="absolute bottom-32 left-10 text-primary text-xl opacity-30"
-          animate={{ rotate: [360, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        >✕</motion.div>
-        
-        {/* Additional blue 'x' marks */}
-        <motion.div 
-          className="absolute top-20 right-20 text-accent-blue text-3xl opacity-50"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        >✕</motion.div>
-        <motion.div 
-          className="absolute bottom-20 right-32 text-accent-blue text-2xl opacity-40"
-          animate={{ rotate: [360, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-        >✕</motion.div>
-        
-        {/* Pink 'x' mark */}
-        <motion.div 
-          className="absolute bottom-16 left-32 text-primary text-2xl opacity-35"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >✕</motion.div>
+            {/* Subtle decorative marks (doodles) */}
+            <motion.div 
+              className="absolute top-16 left-6 text-accent-yellow text-2xl opacity-40"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            >⊕</motion.div>
+            <motion.div 
+              className="absolute bottom-32 left-10 text-primary text-xl opacity-30"
+              animate={{ rotate: [360, 0] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            >✕</motion.div>
+            
+            {/* Additional blue 'x' marks */}
+            <motion.div 
+              className="absolute top-20 right-20 text-accent-blue text-3xl opacity-50"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+            >✕</motion.div>
+            <motion.div 
+              className="absolute bottom-20 right-32 text-accent-blue text-2xl opacity-40"
+              animate={{ rotate: [360, 0] }}
+              transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            >✕</motion.div>
+            
+            {/* Pink 'x' mark */}
+            <motion.div 
+              className="absolute bottom-16 left-32 text-primary text-2xl opacity-35"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            >✕</motion.div>
+          </>
+        )}
 
         {/* Main content - Split-screen layout */}
 
@@ -300,26 +331,30 @@ export default function Landing() {
                 <motion.h1 
                   className="text-5xl sm:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight text-accent-blue font-display"
                 >
-                  {"Srujana".split("").map((letter, index) => (
-                    <motion.span
-                      key={index}
-                      className="inline-block"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{
-                        opacity: [0, 1, 1, 0],
-                        y: [20, 0, 0, 20]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: [0.22, 1, 0.36, 1],
-                        delay: index * 0.2,
-                        times: [0, 0.15, 0.85, 1]
-                      }}
-                    >
-                      {letter}
-                    </motion.span>
-                  ))}
+                  {!prefersReducedMotion ? (
+                    "Srujana".split("").map((letter, index) => (
+                      <motion.span
+                        key={index}
+                        className="inline-block"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{
+                          opacity: [0, 1, 1, 0],
+                          y: [20, 0, 0, 20]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: [0.22, 1, 0.36, 1],
+                          delay: index * 0.2,
+                          times: [0, 0.15, 0.85, 1]
+                        }}
+                      >
+                        {letter}
+                      </motion.span>
+                    ))
+                  ) : (
+                    <span>Srujana</span>
+                  )}
                 </motion.h1>
 
               </motion.div>
@@ -405,8 +440,8 @@ export default function Landing() {
             <div className="flex justify-center lg:justify-end relative">
 
               <motion.div
-                whileHover={{ y: -8, scale: 1.02 }}
-                animate={{ x: [0, 15, 0, -15, 0] }}
+                whileHover={!isMobile ? { y: -8, scale: 1.02 } : undefined}
+                animate={!prefersReducedMotion ? { x: [0, 15, 0, -15, 0] } : undefined}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="relative group"
               >
@@ -474,77 +509,85 @@ export default function Landing() {
                       </div>
                     </div>
 
-                    {/* Confetti elements - matching website theme colors */}
-                    {/* Lime X - top-left on outer ring */}
-                    <motion.div 
-                      className="absolute text-accent-lime text-2xl font-bold"
-                      style={{ top: '12%', left: '10%' }}
-                      animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    >✕</motion.div>
+                    {/* Confetti elements - only disabled for reduced motion preference */}
+                    {!prefersReducedMotion && (
+                      <>
+                        {/* Lime X - top-left on outer ring */}
+                        <motion.div 
+                          className="absolute text-accent-lime text-2xl font-bold"
+                          style={{ top: '12%', left: '10%' }}
+                          animate={{ rotate: [0, 360] }}
+                          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                        >✕</motion.div>
 
-                    {/* Yellow triangle - upper-right on mid ring */}
-                    <motion.div 
-                      className="absolute text-accent-yellow text-xl"
-                      style={{ top: '15%', right: '15%' }}
-                      animate={{ rotate: [0, -360] }}
-                      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                    >△</motion.div>
+                        {/* Yellow triangle - upper-right on mid ring */}
+                        <motion.div 
+                          className="absolute text-accent-yellow text-xl"
+                          style={{ top: '15%', right: '15%' }}
+                          animate={{ rotate: [0, -360] }}
+                          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                        >△</motion.div>
 
-                    {/* Blue dot - mid-left */}
-                    <motion.div 
-                      className="absolute rounded-full bg-primary"
-                      style={{ top: '42%', left: '6%', width: '10px', height: '10px' }}
-                      animate={{ scale: [1, 1.3, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                />
+                        {/* Blue dot - mid-left */}
+                        <motion.div 
+                          className="absolute rounded-full bg-primary"
+                          style={{ top: '42%', left: '6%', width: '10px', height: '10px' }}
+                          animate={{ scale: [1, 1.3, 1] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        />
 
-                    {/* Small lime dot - mid-right on outer ring */}
-                    <motion.div 
-                      className="absolute rounded-full bg-accent-lime"
-                      style={{ top: '40%', right: '8%', width: '8px', height: '8px' }}
-                      animate={{ scale: [1, 1.4, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-                />
+                        {/* Small lime dot - mid-right on outer ring */}
+                        <motion.div 
+                          className="absolute rounded-full bg-accent-lime"
+                          style={{ top: '40%', right: '8%', width: '8px', height: '8px' }}
+                          animate={{ scale: [1, 1.4, 1] }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                        />
 
-                    {/* Purple dot - bottom-right on mid ring */}
-                    <motion.div 
-                      className="absolute rounded-full bg-purple-500"
-                      style={{ bottom: '22%', right: '18%', width: '9px', height: '9px' }}
-                      animate={{ scale: [1, 1.3, 1] }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                />
+                        {/* Purple dot - bottom-right on mid ring */}
+                        <motion.div 
+                          className="absolute rounded-full bg-purple-500"
+                          style={{ bottom: '22%', right: '18%', width: '9px', height: '9px' }}
+                          animate={{ scale: [1, 1.3, 1] }}
+                          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                        />
 
-                    {/* Blue X - near inner ring */}
-                    <motion.div 
-                      className="absolute text-primary text-lg font-bold"
-                      style={{ bottom: '30%', right: '28%' }}
-                      animate={{ rotate: [360, 0] }}
-                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                >✕</motion.div>
+                        {/* Blue X - near inner ring */}
+                        <motion.div 
+                          className="absolute text-primary text-lg font-bold"
+                          style={{ bottom: '30%', right: '28%' }}
+                          animate={{ rotate: [360, 0] }}
+                          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                        >✕</motion.div>
+                      </>
+                    )}
 
                   </div>
 
-                  {/* Sticker labels - matching website theme */}
-                  {/* Top-right: BUILT DIFFERENT */}
-                  <motion.div 
-                    className="absolute -top-2 -right-2 px-4 py-1.5 rounded-full bg-accent-yellow text-secondary font-black text-xs"
-                    style={{ transform: 'rotate(-4deg)' }}
-                    animate={{ rotate: [-4, 0, -4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    BUILT DIFFERENT
-                  </motion.div>
+                  {/* Sticker labels - only disabled for reduced motion preference */}
+                  {!prefersReducedMotion && (
+                    <>
+                      {/* Top-right: BUILT DIFFERENT */}
+                      <motion.div 
+                        className="absolute -top-2 -right-2 px-4 py-1.5 rounded-full bg-accent-yellow text-secondary font-black text-xs"
+                        style={{ transform: 'rotate(-4deg)' }}
+                        animate={{ rotate: [-4, 0, -4] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        BUILT DIFFERENT
+                      </motion.div>
 
-                  {/* Bottom-left: WEEK 02 · LIVE */}
-                  <motion.div 
-                    className="absolute -bottom-2 -left-2 px-4 py-1.5 rounded-full bg-primary text-white font-black text-xs"
-                    style={{ transform: 'rotate(3deg)' }}
-                    animate={{ rotate: [3, 0, 3] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  >
-                    WEEK 02 · LIVE
-                  </motion.div>
+                      {/* Bottom-left: WEEK 02 · LIVE */}
+                      <motion.div 
+                        className="absolute -bottom-2 -left-2 px-4 py-1.5 rounded-full bg-primary text-white font-black text-xs"
+                        style={{ transform: 'rotate(3deg)' }}
+                        animate={{ rotate: [3, 0, 3] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                      >
+                        WEEK 02 · LIVE
+                      </motion.div>
+                    </>
+                  )}
 
                 </div>
 
