@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { BookOpen, Hammer, Users, Trophy, TrendingUp } from 'lucide-react';
 
@@ -30,7 +30,7 @@ const steps = [
   },
 ];
 
-export default function Timeline() {
+function Timeline() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -91,3 +91,5 @@ export default function Timeline() {
     </div>
   );
 }
+
+export default memo(Timeline);

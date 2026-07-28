@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import { useMotionValue, useTransform, animate, useInView, motion } from 'framer-motion';
 
-export default function AnimatedCounter({ value, suffix = '', prefix = '', duration = 2 }) {
+function AnimatedCounter({ value, suffix = '', prefix = '', duration = 2 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
   const count = useMotionValue(0);
@@ -28,3 +28,5 @@ export default function AnimatedCounter({ value, suffix = '', prefix = '', durat
     </span>
   );
 }
+
+export default memo(AnimatedCounter);

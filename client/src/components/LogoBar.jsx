@@ -1,4 +1,6 @@
-export default function LogoBar({ className = '', size = 'md' }) {
+import { memo } from 'react';
+
+function LogoBar({ className = '', size = 'md' }) {
   const isLarge = size === 'lg';
 
   return (
@@ -49,3 +51,5 @@ export default function LogoBar({ className = '', size = 'md' }) {
     </div>
   );
 }
+
+export default memo(LogoBar);

@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaQuery';
 
 const words = ['Code.', 'Compete.', 'Build.', 'Learn.', 'Win.', 'Grow.', 'Innovate.', 'Create.', 'Conquer.'];
 
-export default function RotatingText() {
+function RotatingText() {
   const [index, setIndex] = useState(0);
   const isMobile = useIsMobile();
   const reducedMotion = usePrefersReducedMotion();
+
+  const intervalDuration = useMemo(() => isMobile ? 3500 : 2500, [isMobile]);
 
   useEffect(() => {
     if (reducedMotion) return undefined;
 
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
-    }, isMobile ? 3500 : 2500);
+    }, intervalDuration);
 
     return () => clearInterval(interval);
-  }, [isMobile, reducedMotion]);
+  }, [intervalDuration, reducedMotion]);
 
   return (
     <div className="relative h-12 sm:h-16 mb-4">
@@ -56,3 +58,5 @@ export default function RotatingText() {
     </div>
   );
 }
+
+export default memo(RotatingText);

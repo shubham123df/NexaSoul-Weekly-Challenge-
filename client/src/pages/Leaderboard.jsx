@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { motion } from 'framer-motion';
 import { Trophy } from 'lucide-react';
@@ -10,15 +10,11 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 };
 
-function formatTime(seconds) {
-
+const formatTime = (seconds) => {
   const m = Math.floor(seconds / 60);
-
   const s = seconds % 60;
-
   return `${m}m ${s}s`;
-
-}
+};
 
 
 

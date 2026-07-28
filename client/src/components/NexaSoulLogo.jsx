@@ -1,4 +1,6 @@
-export default function NexaSoulLogo({ className = 'h-8' }) {
+import { memo } from 'react';
+
+function NexaSoulLogo({ className = 'h-8' }) {
   return (
     <svg
       viewBox="0 0 280 60"
@@ -69,3 +71,5 @@ export default function NexaSoulLogo({ className = 'h-8' }) {
     </svg>
   );
 }
+
+export default memo(NexaSoulLogo);

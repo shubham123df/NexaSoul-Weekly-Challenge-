@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Trophy, Users, ArrowRight, Sparkles, Award } from 'lucide-react';
@@ -62,8 +62,11 @@ const highlights = [
 
 export default function Highlights() {
   const [activeFilter, setActiveFilter] = useState('All');
-  const visibleHighlights = highlights.filter((highlight) =>
-    activeFilter === 'All' ? true : highlight.status === activeFilter.toLowerCase(),
+  const visibleHighlights = useMemo(() => 
+    highlights.filter((highlight) =>
+      activeFilter === 'All' ? true : highlight.status === activeFilter.toLowerCase(),
+    ),
+    [activeFilter]
   );
 
   return (

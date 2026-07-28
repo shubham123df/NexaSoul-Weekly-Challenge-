@@ -1,4 +1,5 @@
 import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaQuery';
+import { memo, useMemo } from 'react';
 
 const allOrbs = [
   { size: 500, x: '5%', y: '10%', color: 'rgba(37, 99, 235, 0.15)', delay: 0, duration: 20 },
@@ -14,11 +15,19 @@ const allOrbs = [
 
 const mobileOrbIndices = [0, 1, 4, 6];
 
-export default function AnimatedBackground() {
+function AnimatedBackground() {
   const isMobile = useIsMobile();
   const reducedMotion = usePrefersReducedMotion();
-  const orbs = isMobile ? mobileOrbIndices.map((i) => allOrbs[i]) : allOrbs;
-  const shouldAnimate = !reducedMotion && !isMobile;
+  
+  const orbs = useMemo(() => 
+    isMobile ? mobileOrbIndices.map((i) => allOrbs[i]) : allOrbs, 
+    [isMobile]
+  );
+  
+  const shouldAnimate = useMemo(() => 
+    !reducedMotion && !isMobile, 
+    [reducedMotion, isMobile]
+  );
 
   return (
     <div
@@ -76,3 +85,5 @@ export default function AnimatedBackground() {
     </div>
   );
 }
+
+export default memo(AnimatedBackground);

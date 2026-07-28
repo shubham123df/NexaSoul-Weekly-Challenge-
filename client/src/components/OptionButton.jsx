@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { Check, Circle } from 'lucide-react';
+import { memo } from 'react';
 
 const labels = ['A', 'B', 'C', 'D'];
 
-export default function OptionButton({ index, text, selected, onSelect, disabled, variant = 'default' }) {
+function OptionButton({ index, text, selected, onSelect, disabled, variant = 'default' }) {
   const isEdu = variant === 'edu';
 
   if (isEdu) {
@@ -100,3 +101,5 @@ export default function OptionButton({ index, text, selected, onSelect, disabled
     </motion.button>
   );
 }
+
+export default memo(OptionButton);

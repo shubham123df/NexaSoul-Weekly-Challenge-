@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 export default function CursorEffects() {
@@ -6,7 +6,7 @@ export default function CursorEffects() {
   const [hoverEffects, setHoverEffects] = useState([]);
   const containerRef = useRef(null);
 
-  const handleClick = (e) => {
+  const handleClick = useCallback((e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -25,9 +25,9 @@ export default function CursorEffects() {
     setTimeout(() => {
       setClicks(prev => prev.filter(click => click.id !== newClick.id));
     }, 1500);
-  };
+  }, []);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -49,7 +49,7 @@ export default function CursorEffects() {
         setHoverEffects(prev => prev.filter(h => h.id !== newHover.id));
       }, 2000);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -61,7 +61,7 @@ export default function CursorEffects() {
         container.removeEventListener('mousemove', handleMouseMove);
       };
     }
-  }, []);
+  }, [handleClick, handleMouseMove]);
 
   return (
     <div

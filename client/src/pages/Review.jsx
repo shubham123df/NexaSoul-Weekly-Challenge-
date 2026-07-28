@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { quizApi } from '../api/client';
@@ -14,6 +14,10 @@ export default function Review() {
   const [loading, setLoading] = useState(true);
   const results = JSON.parse(sessionStorage.getItem('nexasoul_results') || 'null');
   const quizState = JSON.parse(sessionStorage.getItem('nexasoul_quiz_state') || 'null');
+
+  const handleExpand = useCallback((index) => {
+    setExpanded(expanded === index ? null : index);
+  }, [expanded]);
 
   useEffect(() => {
     if (!results?.quizId) {
@@ -95,7 +99,7 @@ export default function Review() {
                 className="bg-white rounded-2xl border-2 border-primary/20 shadow-md overflow-hidden"
               >
                 <button
-                  onClick={() => setExpanded(expanded === item.questionNumber ? null : item.questionNumber)}
+                  onClick={() => handleExpand(item.questionNumber)}
                   className="w-full p-5 text-left flex items-start gap-4 hover:bg-primary/5 transition-colors"
                 >
                   <span className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold shrink-0 border-2 ${

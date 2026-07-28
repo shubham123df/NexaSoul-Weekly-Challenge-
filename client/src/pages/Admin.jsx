@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { adminApi, setAdminSecret } from '../api/client';
 import { Eye, EyeOff } from 'lucide-react';
@@ -27,7 +27,7 @@ export default function Admin() {
   const [selectedSubmissions, setSelectedSubmissions] = useState([]);
 
   // Handle tab changes with data loading
-  const handleTabChange = (newTab) => {
+  const handleTabChange = useCallback((newTab) => {
     if (newTab !== 'quizzes' && !selectedQuiz && quizzes.length > 0) {
       setSelectedQuiz(quizzes[0]);
     }
@@ -40,7 +40,7 @@ export default function Admin() {
     } else if (newTab === 'analytics' && selectedQuiz) {
       loadAnalytics(selectedQuiz.id);
     }
-  };
+  }, [selectedQuiz, quizzes]);
 
   // Hide navbar and footer when viewing submission details
   useEffect(() => {

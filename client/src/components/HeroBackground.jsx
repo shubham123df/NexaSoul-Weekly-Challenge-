@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 const codeSnippets = [
@@ -22,6 +22,38 @@ export default function HeroBackground() {
   const [cursorTrail, setCursorTrail] = useState([]);
   const containerRef = useRef(null);
 
+  // Memoize floating elements to prevent recreation on every render
+  const floatingSnippets = useMemo(() => 
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      snippet: codeSnippets[i % codeSnippets.length],
+      x: Math.random() * 90 + 5,
+      y: Math.random() * 90 + 5,
+      delay: Math.random() * 10,
+      duration: Math.random() * 15 + 20,
+      depth: Math.random() * 0.5 + 0.5,
+    })), []);
+
+  const glassComponents = useMemo(() => 
+    Array.from({ length: 10 }, (_, i) => ({
+      id: i,
+      type: uiComponents[i % uiComponents.length],
+      x: Math.random() * 85 + 7.5,
+      y: Math.random() * 85 + 7.5,
+      delay: Math.random() * 12,
+      duration: Math.random() * 12 + 18,
+    })), []);
+
+  const floatingCards = useMemo(() => 
+    Array.from({ length: 4 }, (_, i) => ({
+      id: i,
+      ...codeCards[i % codeCards.length],
+      x: Math.random() * 70 + 15,
+      y: Math.random() * 70 + 15,
+      delay: Math.random() * 8,
+      duration: Math.random() * 20 + 25,
+    })), []);
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (containerRef.current) {
@@ -44,37 +76,6 @@ export default function HeroBackground() {
       return () => container.removeEventListener('mousemove', handleMouseMove);
     }
   }, []);
-
-  // Layer 2: Floating code snippets
-  const floatingSnippets = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    snippet: codeSnippets[i % codeSnippets.length],
-    x: Math.random() * 90 + 5,
-    y: Math.random() * 90 + 5,
-    delay: Math.random() * 10,
-    duration: Math.random() * 15 + 20,
-    depth: Math.random() * 0.5 + 0.5,
-  }));
-
-  // Layer 3: Tiny glass UI components
-  const glassComponents = Array.from({ length: 10 }, (_, i) => ({
-    id: i,
-    type: uiComponents[i % uiComponents.length],
-    x: Math.random() * 85 + 7.5,
-    y: Math.random() * 85 + 7.5,
-    delay: Math.random() * 12,
-    duration: Math.random() * 12 + 18,
-  }));
-
-  // Floating code cards
-  const floatingCards = Array.from({ length: 4 }, (_, i) => ({
-    id: i,
-    ...codeCards[i % codeCards.length],
-    x: Math.random() * 70 + 15,
-    y: Math.random() * 70 + 15,
-    delay: Math.random() * 8,
-    duration: Math.random() * 20 + 25,
-  }));
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">

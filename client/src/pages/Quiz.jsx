@@ -237,7 +237,7 @@ export default function Quiz() {
     }
   }, [quizStarted, submitting, submitQuiz]);
 
-  const handleSelect = (index) => {
+  const handleSelect = useCallback((index) => {
     if (submitting) return;
     setSelectedOption(index);
     
@@ -269,7 +269,7 @@ export default function Quiz() {
       setQuestionTime(0);
       questionTimeRef.current = 0;
     }, 300); // 300ms delay for visual feedback
-  };
+  }, [submitting, currentIndex, submitQuiz]);
 
 
   if (loading) {

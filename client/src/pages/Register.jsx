@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, CreditCard, GraduationCap, Building2, Rocket, Sparkles, Shield } from 'lucide-react';
@@ -28,11 +28,11 @@ export default function Register() {
   const [error, setError] = useState('');
   const [checking, setChecking] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  }, [form]);
 
-  const validate = () => {
+  const validate = useCallback(() => {
     if (!form.name || !form.uid || !form.email || !form.mobile || !form.department || !form.year) {
       return 'All fields are required';
     }
@@ -46,7 +46,7 @@ export default function Register() {
     }
 
     return null;
-  };
+  }, [form]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

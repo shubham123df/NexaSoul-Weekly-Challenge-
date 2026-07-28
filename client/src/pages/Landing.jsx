@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -132,33 +132,21 @@ export default function Landing() {
 
 
   useEffect(() => {
-
     async function load() {
-
       try {
-
         const [quizRes, lbRes] = await Promise.all([
-
           quizApi.getActive(),
-
           leaderboardApi.getTop(5),
-
         ]);
 
         setQuiz(quizRes.data);
 
         setLeaderboard(lbRes.data.leaderboard || []);
-
       } catch {
-
         setQuiz(null);
-
       } finally {
-
         setLoading(false);
-
       }
-
     }
 
     load();

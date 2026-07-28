@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Calendar, X as CloseIcon } from 'lucide-react';
@@ -23,32 +23,25 @@ export default function Navbar() {
   const scrollVisible = useScrollDirection(72);
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const loadActiveQuiz = async () => {
-      try {
-        const res = await quizApi.getActive();
-        setActiveQuiz(res.data);
-      } catch {
-        setActiveQuiz(null);
-      }
-    };
-    loadActiveQuiz();
+  const loadActiveQuiz = useCallback(async () => {
+    try {
+      const res = await quizApi.getActive();
+      setActiveQuiz(res.data);
+    } catch {
+      setActiveQuiz(null);
+    }
   }, []);
+
+  useEffect(() => {
+    loadActiveQuiz();
+  }, [loadActiveQuiz]);
 
   // Refresh quiz data when poster modal opens
   useEffect(() => {
     if (posterOpen) {
-      const loadActiveQuiz = async () => {
-        try {
-          const res = await quizApi.getActive();
-          setActiveQuiz(res.data);
-        } catch {
-          setActiveQuiz(null);
-        }
-      };
       loadActiveQuiz();
     }
-  }, [posterOpen]);
+  }, [posterOpen, loadActiveQuiz]);
 
   // Disable body scroll when poster modal is open
   useEffect(() => {

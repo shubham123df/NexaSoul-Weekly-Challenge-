@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -98,14 +98,11 @@ export default function Instructions() {
 
 
 
-  const handleStart = () => {
-
+  const handleStart = useCallback(() => {
     sessionStorage.removeItem('nexasoul_quiz_state');
     startQuiz();
-
     navigate('/quiz');
-
-  };
+  }, [startQuiz, navigate]);
 
 
 

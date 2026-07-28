@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
 import { useIsMobile, usePrefersReducedMotion } from '../hooks/useMediaQuery';
@@ -9,7 +9,7 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-export default function Timer({ totalSeconds, onExpire, isRunning = true, fixed = false }) {
+function Timer({ totalSeconds, onExpire, isRunning = true, fixed = false }) {
   const [remaining, setRemaining] = useState(totalSeconds);
   const expiredRef = useRef(false);
   const onExpireRef = useRef(onExpire);
@@ -44,28 +44,37 @@ export default function Timer({ totalSeconds, onExpire, isRunning = true, fixed 
     return () => clearInterval(interval);
   }, [isRunning]);
 
-  const isWarning = remaining <= 300 && remaining > 60;
-  const isCritical = remaining <= 60;
+  const isWarning = useMemo(() => remaining <= 300 && remaining > 60, [remaining]);
+  const isCritical = useMemo(() => remaining <= 60, [remaining]);
 
-  const borderClass = isCritical
-    ? 'border-red-500/60 bg-red-50/90'
-    : isWarning
-    ? 'border-amber-500/60 bg-amber-50/90'
-    : 'border-primary/30 bg-surface';
+  const borderClass = useMemo(() => 
+    isCritical
+      ? 'border-red-500/60 bg-red-50/90'
+      : isWarning
+      ? 'border-amber-500/60 bg-amber-50/90'
+      : 'border-primary/30 bg-surface',
+    [isCritical, isWarning]
+  );
 
-  const textClass = isCritical
-    ? 'text-red-600'
-    : isWarning
-    ? 'text-amber-600'
-    : 'text-primary';
+  const textClass = useMemo(() => 
+    isCritical
+      ? 'text-red-600'
+      : isWarning
+      ? 'text-amber-600'
+      : 'text-primary',
+    [isCritical, isWarning]
+  );
 
-  const iconClass = isCritical
-    ? 'text-red-500'
-    : isWarning
-    ? 'text-amber-500'
-    : 'text-primary';
+  const iconClass = useMemo(() => 
+    isCritical
+      ? 'text-red-500'
+      : isWarning
+      ? 'text-amber-500'
+      : 'text-primary',
+    [isCritical, isWarning]
+  );
 
-  const timerContent = (
+  const timerContent = useMemo(() => (
     <motion.div
       animate={isCritical && !isMobile && !reducedMotion ? { scale: [1, 1.04, 1] } : {}}
       transition={{ repeat: isCritical && !isMobile && !reducedMotion ? Infinity : 0, duration: 1 }}
@@ -91,7 +100,7 @@ export default function Timer({ totalSeconds, onExpire, isRunning = true, fixed 
         </span>
       )}
     </motion.div>
-  );
+  ), [isCritical, isMobile, reducedMotion, borderClass, fixed, iconClass, remaining, textClass, isWarning]);
 
   if (fixed) {
     return (
@@ -103,6 +112,8 @@ export default function Timer({ totalSeconds, onExpire, isRunning = true, fixed 
 
   return timerContent;
 }
+
+export default memo(Timer);
 
 export function QuestionTimer({ onTick, paused = false }) {
   const [seconds, setSeconds] = useState(0);
@@ -126,11 +137,15 @@ export function QuestionTimer({ onTick, paused = false }) {
     onTick?.(seconds);
   }, [seconds, onTick]);
 
-  const bonusText =
-    seconds <= 5 ? '+5 speed bonus' : seconds <= 10 ? '+3 speed bonus' : 'No speed bonus';
+  const bonusText = useMemo(() => 
+    seconds <= 5 ? '+5 speed bonus' : seconds <= 10 ? '+3 speed bonus' : 'No speed bonus',
+    [seconds]
+  );
 
-  const bonusColor =
-    seconds <= 5 ? 'text-accent-green' : seconds <= 10 ? 'text-accent-cyan' : 'text-text-200';
+  const bonusColor = useMemo(() => 
+    seconds <= 5 ? 'text-accent-green' : seconds <= 10 ? 'text-accent-cyan' : 'text-text-200',
+    [seconds]
+  );
 
   return (
     <div className="text-sm flex items-center gap-2 flex-wrap justify-end">

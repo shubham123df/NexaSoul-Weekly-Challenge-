@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
+import { memo } from 'react';
 
-export default function EventCard({ icon: Icon, title, description, details, delay = 0 }) {
+function EventCard({ icon: Icon, title, description, details, delay = 0 }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -39,3 +40,5 @@ export default function EventCard({ icon: Icon, title, description, details, del
     </motion.div>
   );
 }
+
+export default memo(EventCard);

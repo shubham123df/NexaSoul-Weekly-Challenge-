@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
+import { memo, useMemo } from 'react';
 
-export default function ProgressBar({ current, total, variant = 'default' }) {
-  const percent = total ? (current / total) * 100 : 0;
+function ProgressBar({ current, total, variant = 'default' }) {
+  const percent = useMemo(() => total ? (current / total) * 100 : 0, [current, total]);
   const isEdu = variant === 'edu';
 
   return (
@@ -21,3 +22,5 @@ export default function ProgressBar({ current, total, variant = 'default' }) {
     </div>
   );
 }
+
+export default memo(ProgressBar);

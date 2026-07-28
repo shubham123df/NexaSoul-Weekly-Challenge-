@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Globe, Home, Trophy } from 'lucide-react';
 import LogoBar from './LogoBar';
 import { useQuiz } from '../context/QuizContext';
+import { memo } from 'react';
 
 function InstagramIcon({ className }) {
   return (
@@ -23,6 +24,8 @@ function InstagramIcon({ className }) {
   );
 }
 
+const InstagramIconMemo = memo(InstagramIcon);
+
 function LinkedInIcon({ className }) {
   return (
     <svg
@@ -41,6 +44,8 @@ function LinkedInIcon({ className }) {
     </svg>
   );
 }
+
+const LinkedInIconMemo = memo(LinkedInIcon);
 
 function WhatsAppIcon({ className }) {
   return (
@@ -63,6 +68,8 @@ function WhatsAppIcon({ className }) {
   );
 }
 
+const WhatsAppIconMemo = memo(WhatsAppIcon);
+
 const socialLinks = [
   {
     name: 'Website',
@@ -72,17 +79,17 @@ const socialLinks = [
   {
     name: 'Instagram',
     href: 'https://www.instagram.com/nexasoul_25/',
-    icon: InstagramIcon,
+    icon: InstagramIconMemo,
   },
   {
     name: 'LinkedIn',
     href: 'https://www.linkedin.com/company/nexasoul/',
-    icon: LinkedInIcon,
+    icon: LinkedInIconMemo,
   },
   {
     name: 'WhatsApp',
     href: 'https://chat.whatsapp.com/LsqljE6IVEjIBGSB04wpHq',
-    icon: WhatsAppIcon,
+    icon: WhatsAppIconMemo,
   },
 ];
 
